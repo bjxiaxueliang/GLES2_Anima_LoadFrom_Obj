@@ -15,7 +15,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.bn.Sample9_4.R;
+import com.xiaxl.gl_load_obj.load.ObjModel;
+import com.xiaxl.gl_load_obj.load.ObjParser;
 
 class MySurfaceView extends GLSurfaceView {
     private final float TOUCH_SCALE_FACTOR = 180.0f / 320;//角度缩放比例
@@ -64,7 +65,7 @@ class MySurfaceView extends GLSurfaceView {
 
             //坐标系推远
             MatrixState.pushMatrix();
-            MatrixState.translate(0, 0, -3f);   //ch.obj
+            MatrixState.translate(0, 0, -200f);   //ch.obj
             //绕Y轴、Z轴旋转
             MatrixState.rotate(yAngle, 0, 1, 0);
             //MatrixState.rotate(xAngle, 1, 0, 0);
@@ -82,7 +83,7 @@ class MySurfaceView extends GLSurfaceView {
             //计算GLSurfaceView的宽高比
             float ratio = (float) width / height;
             //调用此方法计算产生透视投影矩阵
-            MatrixState.setProjectFrustum(-ratio, ratio, -1, 1, 2, 100);
+            MatrixState.setProjectFrustum(-ratio, ratio, -1, 1, 2, 1000);
             //调用此方法产生摄像机9参数位置矩阵
             MatrixState.setCamera(0, 0, 0, 0f, 0f, -1f, 0f, 1.0f, 0.0f);
         }
@@ -99,9 +100,13 @@ class MySurfaceView extends GLSurfaceView {
             //初始化光源位置
             MatrixState.setLightLocation(40, 10, 20);
             //加载要绘制的物体
-            lovo = LoadUtil.loadFromFile("testvt.obj", MySurfaceView.this.getResources(), MySurfaceView.this);
+            lovo = LoadUtil.loadFromFile("med2.obj", MySurfaceView.this.getResources(), MySurfaceView.this);
+
+            //ObjModel model = new ObjParser(MySurfaceView.this.getContext()).parseOBJ("/sdcard/camaro.obj");
+            //lovo = new LoadedObjectVertexNormalTexture2(MySurfaceView.this, model.getvXYZ(), model.getViXYZ(), model.getnXYZ(), model.gettST());
+
             //加载纹理
-            textureId = initTexture(R.drawable.ghxp);
+            textureId = initTexture(R.drawable.gold);
         }
     }
 
