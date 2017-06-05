@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.0"
 
     defaultConfig {
-        applicationId "com.bn.gl_load_obj"
+        applicationId "com.xiaxl.gl_load_obj"
         minSdkVersion 8
         targetSdkVersion 22
         versionCode 1

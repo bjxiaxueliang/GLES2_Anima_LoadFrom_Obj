@@ -1,18 +1,21 @@
-package com.xiaxl.gl_load_obj;
+package com.xiaxl.gl_load_obj.gl.spirit;
 
 
+import android.content.res.Resources;
 import android.opengl.GLES20;
+
+import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
+import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
+import com.xiaxl.gl_load_obj.gl.utils.ShaderUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
-import javax.microedition.khronos.opengles.GL10;
-
-
-//加载后的物体——仅携带顶点信息，颜色随机
-public class LoadedObjectVertexNormalTexture2 {
+/**
+ * 加载后的物体
+ */
+public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
     int mProgram;//自定义渲染管线着色器程序id
     int muMVPMatrixHandle;//总变换矩阵引用
     int muMMatrixHandle;//位置、旋转变换矩阵
@@ -25,24 +28,22 @@ public class LoadedObjectVertexNormalTexture2 {
     String mFragmentShader;//片元着色器代码脚本
 
     FloatBuffer mVertexBuffer;//顶点坐标数据缓冲
-    ShortBuffer mVertexIndexBuffer;
     FloatBuffer mNormalBuffer;//顶点法向量数据缓冲
     FloatBuffer mTexCoorBuffer;//顶点纹理坐标数据缓冲
     int vCount = 0;
-    int vIndexCount = 0;
 
-    public LoadedObjectVertexNormalTexture2(MySurfaceView mv, float[] vertices, short[] vIndex, float[] normals, float texCoors[]) {
+    public LeGLBaseSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[]) {
+        super(scene);
         //初始化顶点坐标与着色数据
-        initVertexData(vertices, vIndex, normals, texCoors);
+        initVertexData(vertices, normals, texCoors);
         //初始化shader
-        initShader(mv);
+        initShader(scene.getResources());
     }
 
     //初始化顶点坐标与着色数据的方法
-    public void initVertexData(float[] vertices, short[] vIndex, float[] normals, float texCoors[]) {
+    public void initVertexData(float[] vertices, float[] normals, float texCoors[]) {
         //顶点坐标数据的初始化================begin============================
         vCount = vertices.length / 3;
-        vIndexCount = vIndex.length;
 
         //创建顶点坐标数据缓冲
         //vertices.length*4是因为一个整数四个字节
@@ -54,14 +55,6 @@ public class LoadedObjectVertexNormalTexture2 {
         //特别提示：由于不同平台字节顺序不同数据单元不是字节的一定要经过ByteBuffer
         //转换，关键是要通过ByteOrder设置nativeOrder()，否则有可能会出问题
         //顶点坐标数据的初始化================end============================
-
-
-        ByteBuffer vibb = ByteBuffer.allocateDirect(vIndex.length * 2);
-        vibb.order(ByteOrder.nativeOrder());
-        mVertexIndexBuffer = vibb.asShortBuffer();
-        mVertexIndexBuffer.put(vIndex);
-        mVertexIndexBuffer.position(0);
-
 
         //顶点法向量数据的初始化================begin============================
         ByteBuffer cbb = ByteBuffer.allocateDirect(normals.length * 4);
@@ -85,11 +78,11 @@ public class LoadedObjectVertexNormalTexture2 {
     }
 
     //初始化shader
-    public void initShader(MySurfaceView mv) {
+    public void initShader(Resources res) {
         //加载顶点着色器的脚本内容
-        mVertexShader = ShaderUtil.loadFromAssetsFile("vertex.sh", mv.getResources());
+        mVertexShader = ShaderUtil.loadFromAssetsFile("vertex.sh", res);
         //加载片元着色器的脚本内容
-        mFragmentShader = ShaderUtil.loadFromAssetsFile("frag.sh", mv.getResources());
+        mFragmentShader = ShaderUtil.loadFromAssetsFile("frag.sh", res);
         //基于顶点着色器与片元着色器创建程序
         mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
         //获取程序中顶点位置属性引用
@@ -108,7 +101,9 @@ public class LoadedObjectVertexNormalTexture2 {
         maCameraHandle = GLES20.glGetUniformLocation(mProgram, "uCamera");
     }
 
-    public void drawSelf(int texId) {
+    @Override
+    public void drawSelf(int texId, long drawTime) {
+        super.drawSelf(texId, drawTime);
         //制定使用某套着色器程序
         GLES20.glUseProgram(mProgram);
         //将最终变换矩阵传入着色器程序
@@ -157,7 +152,6 @@ public class LoadedObjectVertexNormalTexture2 {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texId);
         //绘制加载的物体
-        //GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vCount);
-        GLES20.glDrawElements(GL10.GL_TRIANGLES, vIndexCount, GL10.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vCount);
     }
 }
