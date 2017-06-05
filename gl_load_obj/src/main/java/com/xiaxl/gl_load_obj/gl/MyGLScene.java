@@ -123,7 +123,7 @@ public class MyGLScene extends LeGLBaseScene {
          * ----勋章---
          */
         // 加载obj文件
-        ObjData objData = ObjParser.loadObj("med.obj", this.getResources());
+        ObjData objData = ObjParser.loadObj("car.obj", this.getResources());
         // 构建3D物体对象
         mLeGLObjSpirit = new LeGLObjSprite(this, objData.getvXYZ(), objData.getnXYZ(), objData.gettST());
         //mLeGLObjSpirit.setSpriteScale(0.01f);
