@@ -73,7 +73,7 @@ public class ObjParser {
                 else if (tempsa[0].trim().equals("vt")) {//此行为纹理坐标行
                     //若为纹理坐标行则提取ST坐标并添加进原始纹理坐标列表中
                     vtList.add(Float.parseFloat(tempsa[1]));
-                    vtList.add(Float.parseFloat(tempsa[2]));
+                    vtList.add(1 - Float.parseFloat(tempsa[2]));
                 }
                 // 法向量
                 else if (tempsa[0].trim().equals("vn")) {
@@ -91,7 +91,7 @@ public class ObjParser {
                     Short vIndex1 = Short.valueOf(f1[0]);
                     vIndex1--;
                     Short vIndex2 = Short.valueOf(f2[0]);
-                    vIndex2 --;
+                    vIndex2--;
                     Short vIndex3 = Short.valueOf(f3[0]);
                     vIndex3--;
                     // 顶点index
@@ -102,7 +102,7 @@ public class ObjParser {
                     Short vtIndex1 = Short.valueOf(f1[1]);
                     vtIndex1--;
                     Short vtIndex2 = Short.valueOf(f2[1]);
-                    vtIndex2 --;
+                    vtIndex2--;
                     Short vtIndex3 = Short.valueOf(f3[1]);
                     vtIndex3--;
                     // 顶点纹理index

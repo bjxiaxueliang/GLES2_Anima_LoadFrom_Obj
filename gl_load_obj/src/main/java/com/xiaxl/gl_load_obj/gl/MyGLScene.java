@@ -82,7 +82,7 @@ public class MyGLScene extends LeGLBaseScene {
          * 绘制地球
          */
         MatrixState.pushMatrix();
-        MatrixState.translate(0, 0, -200);
+        MatrixState.translate(0, 0, -10);
 
         mLeGLObjSpirit.drawSelf(textureGoldId, drawTime);
 
@@ -136,7 +136,7 @@ public class MyGLScene extends LeGLBaseScene {
     private void initTexture() {
         // 两球之间连线的纹理图片
         textureGoldId = TextureUtil.getTextureIdByDrawableId(
-                this.getContext(), R.drawable.gold);
+                this.getContext(), R.drawable.car);
     }
 
     public float getSceneWidth() {
