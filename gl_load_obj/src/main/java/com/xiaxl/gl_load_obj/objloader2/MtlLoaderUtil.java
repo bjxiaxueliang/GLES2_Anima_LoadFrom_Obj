@@ -3,6 +3,7 @@ package com.xiaxl.gl_load_obj.objloader2;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -17,6 +18,8 @@ import java.util.StringTokenizer;
  *         加载材质工具类
  */
 public class MtlLoaderUtil {
+
+    private static final String TAG = "MtlLoaderUtil";
 
 
     /**
@@ -86,7 +89,8 @@ public class MtlLoaderUtil {
                 }
                 // 高光调整参数
                 else if (type.equals(MtlLoaderUtil.NS)) {
-                    currMtlData.ns = Float.parseFloat(parts.nextToken());
+                    String ns = parts.nextToken();
+                    currMtlData.ns = Float.parseFloat(ns);
                 }
                 // 溶解度，为0时完全透明，1完全不透明
                 else if (type.equals(MtlLoaderUtil.D) || type.equals(MtlLoaderUtil.TR)) {
@@ -112,6 +116,7 @@ public class MtlLoaderUtil {
             }
             buffer.close();
         } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
             throw new Exception(e.getMessage(), e.getCause());
         }
         return mMTLMap;
@@ -124,7 +129,7 @@ public class MtlLoaderUtil {
      * 材质需解析字段
      */
     // 定义一个名为 'xxx'的材质
-    private static final String NEWMTL = "name";
+    private static final String NEWMTL = "newmtl";
     // 材质的环境光（ambient color）
     private static final String KA = "Ka";
     // 散射光（diffuse color）用Kd

@@ -183,8 +183,10 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
         GLES20.glEnableVertexAttribArray(maPositionHandle);
         GLES20.glEnableVertexAttribArray(maNormalHandle);
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texId);
+        if (mHasTexture) {
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texId);
+        }
         //绘制加载的物体
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vCount);
     }

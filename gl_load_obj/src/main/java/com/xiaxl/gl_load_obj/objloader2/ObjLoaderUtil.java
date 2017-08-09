@@ -88,9 +88,7 @@ public class ObjLoaderUtil {
                     String materialLibPath = parts.nextToken();
                     //#########加载材质信息############
                     if (TextUtils.isEmpty(materialLibPath) == false) {
-                        // obj同一路径下的mtl文件
-                        File materialFile = new File(new File(fname).getParent() + File.separatorChar + materialLibPath);
-                        mtlMap = MtlLoaderUtil.load(materialFile.getAbsolutePath(), res);
+                        mtlMap = MtlLoaderUtil.load(materialLibPath, res);
                     }
 
                 }
@@ -240,6 +238,7 @@ public class ObjLoaderUtil {
                 objectList.add(currObjData);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new Exception(e.getMessage(), e.getCause());
         }
 
@@ -352,11 +351,11 @@ public class ObjLoaderUtil {
          * index数组(顶点、纹理、法向量一一对应后，以下三个列表会清空)
          */
         // 顶点index数组
-        public ArrayList<Integer> vertexIndices;
+        public ArrayList<Integer> vertexIndices = new ArrayList<Integer>();
         // 纹理index数组
-        public ArrayList<Integer> texCoordIndices;
+        public ArrayList<Integer> texCoordIndices = new ArrayList<Integer>();
         // 法向量index数组
-        public ArrayList<Integer> normalIndices;
+        public ArrayList<Integer> normalIndices = new ArrayList<Integer>();
 
     }
 }

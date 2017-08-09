@@ -12,8 +12,9 @@ import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
 import com.xiaxl.gl_load_obj.gl.spirit.LeGLObjSprite;
 import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
 import com.xiaxl.gl_load_obj.gl.utils.TextureUtil;
-import com.xiaxl.gl_load_obj.objloader.ObjData;
-import com.xiaxl.gl_load_obj.objloader.ObjParser;
+import com.xiaxl.gl_load_obj.objloader2.ObjLoaderUtil;
+
+import java.util.ArrayList;
 
 /*
  * GL SurfaceView
@@ -122,11 +123,17 @@ public class MyGLScene extends LeGLBaseScene {
         /**
          * ----勋章---
          */
-        // 加载obj文件
-        ObjData objData = ObjParser.loadObj("obj/camaro.obj", this.getResources());
-        // 构建3D物体对象
-        mLeGLObjSpirit = new LeGLObjSprite(this, objData.getvXYZ(), objData.getnXYZ(), objData.gettST(),0xffffffff);
-        //mLeGLObjSpirit.setSpriteScale(0.01f);
+        try {
+            ArrayList<ObjLoaderUtil.ObjData> mObjList = ObjLoaderUtil.load("camaro.obj", this.getResources());
+            if (mObjList != null) {
+                for (int i = 0; i < mObjList.size(); i++) {
+                    ObjLoaderUtil.ObjData data = mObjList.get(i);
+                    mLeGLObjSpirit = new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
