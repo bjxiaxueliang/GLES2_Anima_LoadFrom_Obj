@@ -20,30 +20,6 @@ public class LoaderObjUtil {
     private static final String TAG = "LoaderObjUtil";
 
 
-    //###################################################################################
-    /**
-     * obj需解析字段
-     */
-    // obj对应的材质文件
-    private static final String MTLLIB = "mtllib";
-    // 组名称
-    private static final String G = "g";
-    // o 对象名称(Object name)
-    private static final String O = "o";
-    // 顶点
-    private static final String V = "v";
-    // 纹理坐标
-    private static final String VT = "vt";
-    // 顶点法线
-    private static final String VN = "vn";
-    // 使用的材质
-    private static final String USEMTL = "usemtl";
-    // v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3(索引起始于1)
-    private static final String F = "f";
-
-
-    //###################################################################################
-
     /**
      * 解析
      *
@@ -331,6 +307,56 @@ public class LoaderObjUtil {
             }
         }
         return objectList;
+    }
+
+    //###################################################################################
+    /**
+     * obj需解析字段
+     */
+    // obj对应的材质文件
+    private static final String MTLLIB = "mtllib";
+    // 组名称
+    private static final String G = "g";
+    // o 对象名称(Object name)
+    private static final String O = "o";
+    // 顶点
+    private static final String V = "v";
+    // 纹理坐标
+    private static final String VT = "vt";
+    // 顶点法线
+    private static final String VN = "vn";
+    // 使用的材质
+    private static final String USEMTL = "usemtl";
+    // v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3(索引起始于1)
+    private static final String F = "f";
+
+
+    //###################################################################################
+
+    public static class ObjData {
+
+        // 对象名称
+        public String name;
+        // 材质
+        public LoaderMtlUtil.MtlData mtlData;
+
+        /**
+         * 顶点、纹理、法向量一一对应后的数据
+         */
+        public float[] aVertices;
+        public float[] aTexCoords;
+        public float[] aNormals;
+
+        /**
+         * index数组(顶点、纹理、法向量一一对应后，以下三个列表会清空)
+         */
+        // 顶点index数组
+        public ArrayList<Integer> vertexIndices;
+        // 纹理index数组
+        public ArrayList<Integer> texCoordIndices;
+        // 法向量index数组
+        public ArrayList<Integer> normalIndices;
+
     }
 }
 
