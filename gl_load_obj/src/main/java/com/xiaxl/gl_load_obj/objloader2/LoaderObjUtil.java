@@ -344,6 +344,7 @@ public class LoaderObjUtil {
          * 顶点、纹理、法向量一一对应后的数据
          */
         public float[] aVertices;
+        // 顶点纹理可能会没有
         public float[] aTexCoords;
         public float[] aNormals;
 
