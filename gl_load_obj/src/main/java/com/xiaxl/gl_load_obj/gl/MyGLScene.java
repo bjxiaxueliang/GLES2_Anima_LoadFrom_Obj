@@ -1,6 +1,7 @@
 package com.xiaxl.gl_load_obj.gl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -8,9 +9,10 @@ import android.view.MotionEvent;
 import com.xiaxl.gl_load_obj.R;
 import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
 import com.xiaxl.gl_load_obj.gl.spirit.LeGLObjSprite;
+import com.xiaxl.gl_load_obj.gl.utils.BitmapUtil;
 import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
 import com.xiaxl.gl_load_obj.gl.utils.TextureUtil;
-import com.xiaxl.gl_load_obj.objloader2.ObjLoaderUtil;
+import com.xiaxl.gl_load_obj.objloader.ObjLoaderUtil;
 
 import java.util.ArrayList;
 
@@ -85,7 +87,7 @@ public class MyGLScene extends LeGLBaseScene {
         //
         for (int i = 0; i < mObjSprites.size(); i++) {
             LeGLObjSprite sprite = mObjSprites.get(i);
-            sprite.drawSelf(textureGoldId, drawTime);
+            sprite.drawSelf(drawTime);
         }
 
         MatrixState.popMatrix();
@@ -102,12 +104,6 @@ public class MyGLScene extends LeGLBaseScene {
     // 高
     private float mSceneHeight = 1280;
 
-    /**
-     * 纹理id
-     */
-    // ---纹理id开始---
-    // 系统分配的纹理id
-    private int textureGoldId = 0;
 
     /**
      * UI
@@ -132,7 +128,9 @@ public class MyGLScene extends LeGLBaseScene {
                     //
                     int diffuseColor = data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff;
                     float alpha = data.mtlData != null ? data.mtlData.alpha : 1.0f;
-                    mObjSprites.add(new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, diffuseColor, alpha));
+                    String texturePath = data.mtlData != null ? data.mtlData.Kd_Texture : "";
+                    Bitmap bmp = BitmapUtil.getBitmapFromAsset(this.getContext(), texturePath);
+                    mObjSprites.add(new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, diffuseColor, alpha, bmp));
                 }
             }
         } catch (Exception e) {
@@ -145,9 +143,7 @@ public class MyGLScene extends LeGLBaseScene {
      * 初始化纹理
      */
     private void initTexture() {
-        // 两球之间连线的纹理图片
-        textureGoldId = TextureUtil.getTextureIdByDrawableId(
-                this.getContext(), R.drawable.banana);
+        //
     }
 
     public float getSceneWidth() {

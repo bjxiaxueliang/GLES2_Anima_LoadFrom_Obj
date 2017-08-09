@@ -128,7 +128,7 @@ public class LeGLBaseAnimaSprite {
      *
      * @param drawTime
      */
-    public void drawSelf(int texId, long drawTime) {
+    public void drawSelf(long drawTime) {
         // ---运行动画---
         if (mAnimaList != null && mAnimaList.size() != 0) {
             for (index = mAnimaList.size() - 1; index >= 0; index--) {

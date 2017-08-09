@@ -2,12 +2,15 @@ package com.xiaxl.gl_load_obj.gl.spirit;
 
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.opengl.GLES20;
 
+import com.xiaxl.gl_load_obj.R;
 import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
 import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
 import com.xiaxl.gl_load_obj.gl.utils.ShaderUtil;
+import com.xiaxl.gl_load_obj.gl.utils.TextureUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -37,24 +40,34 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
     // 材质漫反射光
     protected float[] mDifColor = new float[4];
     // 材质中alpha
-    protected float alpha;
-
-    // 是否有纹理
-    private boolean mHasTexture = false;
+    protected float mAlpha;
+    // 需转化为纹理的图片
+    protected Bitmap mBmp;
     //
     int vCount = 0;
+    /**
+     *
+     */
+    // 是否有纹理
+    protected boolean mHasTexture = false;
+    // 纹理是否已加载
+    protected boolean isInintFinsh = false;
+    // 纹理id
+    protected int textureId;
 
-    public LeGLBaseSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha) {
+
+    public LeGLBaseSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha, Bitmap bmp) {
         super(scene);
         //初始化顶点坐标与着色数据
-        initVertexData(vertices, normals, texCoors, diffuseColor, alpha);
+        initVertexData(vertices, normals, texCoors, diffuseColor, alpha, bmp);
         //初始化shader
         initShader(scene.getResources());
     }
 
     //初始化顶点坐标与着色数据的方法
-    public void initVertexData(float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha) {
-        this.alpha = alpha;
+    public void initVertexData(float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha, Bitmap bmp) {
+        this.mAlpha = alpha;
+        this.mBmp = bmp;
         //顶点坐标数据的初始化================begin============================
         vCount = vertices.length / 3;
 
@@ -130,9 +143,27 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
         muOpacityHandle = GLES20.glGetUniformLocation(mProgram, "uOpacity");
     }
 
+    /**
+     * 初始化纹理
+     */
+    private void initTexture() {
+        // 两球之间连线的纹理图片
+        if (mBmp != null) {
+            textureId = TextureUtil.getTextureIdByBitmap(mBmp);
+        }
+    }
+
+
     @Override
-    public void drawSelf(int texId, long drawTime) {
-        super.drawSelf(texId, drawTime);
+    public void drawSelf(long drawTime) {
+        super.drawSelf(drawTime);
+
+        // 加载纹理
+        if (isInintFinsh == false) {
+            initTexture();
+            isInintFinsh = true;
+        }
+
         //制定使用某套着色器程序
         GLES20.glUseProgram(mProgram);
         //将最终变换矩阵传入着色器程序
@@ -186,7 +217,7 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
             GLES20.glUniform1i(muRenderTypeHandle, 1);
         }
 
-        GLES20.glUniform1f(muOpacityHandle, alpha);
+        GLES20.glUniform1f(muOpacityHandle, mAlpha);
 
         //启用顶点位置、法向量、纹理坐标数据
         GLES20.glEnableVertexAttribArray(maPositionHandle);
@@ -194,7 +225,7 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
 
         if (mHasTexture) {
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texId);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
         }
         //绘制加载的物体
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vCount);

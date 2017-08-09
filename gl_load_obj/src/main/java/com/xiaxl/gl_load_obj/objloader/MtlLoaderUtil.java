@@ -1,4 +1,4 @@
-package com.xiaxl.gl_load_obj.objloader2;
+package com.xiaxl.gl_load_obj.objloader;
 
 import android.content.res.Resources;
 import android.graphics.Color;
