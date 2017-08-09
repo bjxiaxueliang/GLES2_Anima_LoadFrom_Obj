@@ -3,6 +3,7 @@ package com.xiaxl.gl_load_obj.gl;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.OvershootInterpolator;
 
@@ -83,9 +84,12 @@ public class MyGLScene extends LeGLBaseScene {
          * 绘制地球
          */
         MatrixState.pushMatrix();
-        MatrixState.translate(0, 0, -10);
-
-        mLeGLObjSpirit.drawSelf(textureGoldId, drawTime);
+        MatrixState.translate(0, 0, -20);
+        //
+        for (int i = 0; i < mObjSprites.size(); i++) {
+            LeGLObjSprite sprite = mObjSprites.get(i);
+            sprite.drawSelf(textureGoldId, drawTime);
+        }
 
         MatrixState.popMatrix();
 
@@ -113,7 +117,10 @@ public class MyGLScene extends LeGLBaseScene {
      */
     // ------
     // 从obj文件加再来的3d图形
-    private LeGLObjSprite mLeGLObjSpirit = null;
+    //private LeGLObjSprite mLeGLObjSpirit = null;
+
+
+    private ArrayList<LeGLObjSprite> mObjSprites = new ArrayList<LeGLObjSprite>();
 
     /**
      * 初始化场景中的精灵实体类
@@ -124,12 +131,13 @@ public class MyGLScene extends LeGLBaseScene {
          * ----勋章---
          */
         try {
-            ArrayList<ObjLoaderUtil.ObjData> mObjList = ObjLoaderUtil.load("camaro.obj", this.getResources());
+            ArrayList<ObjLoaderUtil.ObjData> mObjList = ObjLoaderUtil.load("multiobjects.obj", this.getResources());
             if (mObjList != null) {
                 for (int i = 0; i < mObjList.size(); i++) {
                     ObjLoaderUtil.ObjData data = mObjList.get(i);
-                    mLeGLObjSpirit = new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff);
+                    mObjSprites.add(new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff));
                 }
+                Log.e("xiaxl: ", mObjList.size() + "");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,9 +181,12 @@ public class MyGLScene extends LeGLBaseScene {
             case MotionEvent.ACTION_MOVE:
                 float dy = y - mPreviousY;//计算触控笔Y位移
                 float dx = x - mPreviousX;//计算触控笔X位移
-
-                float yAngle = mLeGLObjSpirit.getSpriteAngleY();
-                mLeGLObjSpirit.setSpriteAngleY(yAngle += dx * TOUCH_SCALE_FACTOR);
+                //
+                for (int i = 0; i < mObjSprites.size(); i++) {
+                    LeGLObjSprite sprite = mObjSprites.get(i);
+                    float yAngle = sprite.getSpriteAngleY();
+                    sprite.setSpriteAngleY(yAngle += dx * TOUCH_SCALE_FACTOR);
+                }
 
                 this.requestRender();//重绘画面
         }
@@ -191,27 +202,27 @@ public class MyGLScene extends LeGLBaseScene {
      */
     public void startXZAnima() {
         //###################旋转动画###################
-        // 创建动画
-        SpriteAnima rotateAnima = new SpriteAnima();
-        // 动画更改的方法
-        rotateAnima.setAnimaMethod(mLeGLObjSpirit, "setSpriteAngleY");
-        // 从0到360度
-        rotateAnima.setAnimaValue(0, 360, 2100);
-        // 添加动画差值器(超过，再回来)
-        rotateAnima.setInterpolator(new OvershootInterpolator());
-
-        //###################缩放动画###################
-        SpriteAnima scaleAnima = new SpriteAnima();
-        scaleAnima.setAnimaMethod(mLeGLObjSpirit, "setSpriteScale");
-        scaleAnima.setAnimaValue(0.1f, 1.0f, 700);
-
-        //###################
-        // 添加动画
-        mLeGLObjSpirit.addAnima(rotateAnima);
-        mLeGLObjSpirit.addAnima(scaleAnima);
-        //##################
-        // 开启动画
-        mLeGLObjSpirit.startAnimas();
+//        // 创建动画
+//        SpriteAnima rotateAnima = new SpriteAnima();
+//        // 动画更改的方法
+//        rotateAnima.setAnimaMethod(mLeGLObjSpirit, "setSpriteAngleY");
+//        // 从0到360度
+//        rotateAnima.setAnimaValue(0, 360, 2100);
+//        // 添加动画差值器(超过，再回来)
+//        rotateAnima.setInterpolator(new OvershootInterpolator());
+//
+//        //###################缩放动画###################
+//        SpriteAnima scaleAnima = new SpriteAnima();
+//        scaleAnima.setAnimaMethod(mLeGLObjSpirit, "setSpriteScale");
+//        scaleAnima.setAnimaValue(0.1f, 1.0f, 700);
+//
+//        //###################
+//        // 添加动画
+//        mLeGLObjSpirit.addAnima(rotateAnima);
+//        mLeGLObjSpirit.addAnima(scaleAnima);
+//        //##################
+//        // 开启动画
+//        mLeGLObjSpirit.startAnimas();
     }
 
 

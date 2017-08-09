@@ -7,7 +7,7 @@ varying vec4 specular;
 varying vec2 vTextureCoord;
 
 // 直接传入片元着色器的顶点颜色数据
-uniform vec4 uColor;
+uniform vec3 uColor;
 // 绘制纹理or绘制颜色
 uniform int uRenderType;
 
@@ -19,7 +19,7 @@ void main()
       //给此片元颜色值
       gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
    }else{
-      vec4 finalColor=uColor;
+      vec4 finalColor=vec4(uColor,1.0);
       //给此片元颜色值
       gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
    }
