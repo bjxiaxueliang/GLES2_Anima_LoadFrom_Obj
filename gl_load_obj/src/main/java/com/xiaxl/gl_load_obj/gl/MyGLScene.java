@@ -3,12 +3,9 @@ package com.xiaxl.gl_load_obj.gl;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.animation.OvershootInterpolator;
 
 import com.xiaxl.gl_load_obj.R;
-import com.xiaxl.gl_load_obj.gl.anima.SpriteAnima;
 import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
 import com.xiaxl.gl_load_obj.gl.spirit.LeGLObjSprite;
 import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
@@ -115,9 +112,6 @@ public class MyGLScene extends LeGLBaseScene {
     /**
      * UI
      */
-    // ------
-    // 从obj文件加再来的3d图形
-    //private LeGLObjSprite mLeGLObjSpirit = null;
 
 
     private ArrayList<LeGLObjSprite> mObjSprites = new ArrayList<LeGLObjSprite>();
@@ -137,7 +131,6 @@ public class MyGLScene extends LeGLBaseScene {
                     ObjLoaderUtil.ObjData data = mObjList.get(i);
                     mObjSprites.add(new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff));
                 }
-                Log.e("xiaxl: ", mObjList.size() + "");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,7 +144,7 @@ public class MyGLScene extends LeGLBaseScene {
     private void initTexture() {
         // 两球之间连线的纹理图片
         textureGoldId = TextureUtil.getTextureIdByDrawableId(
-                this.getContext(), R.drawable.car);
+                this.getContext(), R.drawable.banana);
     }
 
     public float getSceneWidth() {
