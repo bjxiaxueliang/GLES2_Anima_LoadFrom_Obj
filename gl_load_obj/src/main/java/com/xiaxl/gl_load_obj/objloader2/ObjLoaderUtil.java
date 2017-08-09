@@ -15,9 +15,9 @@ import java.util.StringTokenizer;
 /**
  * obj model
  */
-public class LoaderObjUtil {
+public class ObjLoaderUtil {
 
-    private static final String TAG = "LoaderObjUtil";
+    private static final String TAG = "ObjLoaderUtil";
 
 
     /**
@@ -46,7 +46,7 @@ public class LoaderObjUtil {
         // 法向量数据
         ArrayList<Float> normals = new ArrayList<Float>();
         // 全部材质列表
-        HashMap<String, LoaderMtlUtil.MtlData> mtlMap = null;
+        HashMap<String, MtlLoaderUtil.MtlData> mtlMap = null;
 
         // Ojb索引数据
         ObjData currObjData = new ObjData();
@@ -80,7 +80,7 @@ public class LoaderObjUtil {
                 String type = parts.nextToken();
 
                 // 材质
-                if (type.equals(LoaderObjUtil.MTLLIB)) {
+                if (type.equals(ObjLoaderUtil.MTLLIB)) {
                     if (!parts.hasMoreTokens()) {
                         continue;
                     }
@@ -90,12 +90,12 @@ public class LoaderObjUtil {
                     if (TextUtils.isEmpty(materialLibPath) == false) {
                         // obj同一路径下的mtl文件
                         File materialFile = new File(new File(fname).getParent() + File.separatorChar + materialLibPath);
-                        mtlMap = LoaderMtlUtil.load(materialFile.getAbsolutePath(), res);
+                        mtlMap = MtlLoaderUtil.load(materialFile.getAbsolutePath(), res);
                     }
 
                 }
                 // 对象名称
-                else if (type.equals(LoaderObjUtil.O)) {
+                else if (type.equals(ObjLoaderUtil.O)) {
                     // 对象名称
                     String objName = parts.hasMoreTokens() ? parts.nextToken() : "def";
                     // 面数据
@@ -113,25 +113,25 @@ public class LoaderObjUtil {
                     }
                 }
                 // "v" 顶点属性 添加到顶点数组
-                else if (type.equals(LoaderObjUtil.V)) {
+                else if (type.equals(ObjLoaderUtil.V)) {
                     vertices.add(Float.parseFloat(parts.nextToken()));
                     vertices.add(Float.parseFloat(parts.nextToken()));
                     vertices.add(Float.parseFloat(parts.nextToken()));
                 }
                 // 纹理
-                else if (type.equals(LoaderObjUtil.VT)) {
+                else if (type.equals(ObjLoaderUtil.VT)) {
                     // 这里纹理的Y值，需要(Y = 1-Y0)
                     texCoords.add(Float.parseFloat(parts.nextToken()));
                     texCoords.add(1f - Float.parseFloat(parts.nextToken()));
                 }
                 // 法向量
-                else if (type.equals(LoaderObjUtil.VN)) {
+                else if (type.equals(ObjLoaderUtil.VN)) {
                     normals.add(Float.parseFloat(parts.nextToken()));
                     normals.add(Float.parseFloat(parts.nextToken()));
                     normals.add(Float.parseFloat(parts.nextToken()));
                 }
                 // 使用材质
-                else if (type.equals(LoaderObjUtil.USEMTL)) {
+                else if (type.equals(ObjLoaderUtil.USEMTL)) {
                     // 材质名称
                     currMaterialName = parts.nextToken();
                     if (currObjHasFaces) {
@@ -338,7 +338,7 @@ public class LoaderObjUtil {
         // 对象名称
         public String name;
         // 材质
-        public LoaderMtlUtil.MtlData mtlData;
+        public MtlLoaderUtil.MtlData mtlData;
 
         /**
          * 顶点、纹理、法向量一一对应后的数据

@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
  *         create by xiaxl on 2017.08.09
  *         加载材质工具类
  */
-public class LoaderMtlUtil {
+public class MtlLoaderUtil {
 
 
     /**
@@ -61,7 +61,7 @@ public class LoaderMtlUtil {
                 type = type.replaceAll(" ", "");
 
                 // 定义一个名为 'xxx'的材质
-                if (type.equals(LoaderMtlUtil.NEWMTL)) {
+                if (type.equals(MtlLoaderUtil.NEWMTL)) {
                     currName = parts.hasMoreTokens() ? parts.nextToken() : "def";
                     // 创建材质对象
                     if (currMtlData != null) {
@@ -73,37 +73,37 @@ public class LoaderMtlUtil {
                     currMtlData.name = currName;
                 }
                 // 环境光
-                else if (type.equals(LoaderMtlUtil.KA)) {
+                else if (type.equals(MtlLoaderUtil.KA)) {
                     currMtlData.Ka_Color = getColorFromParts(parts);
                 }
                 // 散射光
-                else if (type.equals(LoaderMtlUtil.KD)) {
+                else if (type.equals(MtlLoaderUtil.KD)) {
                     currMtlData.Kd_Color = getColorFromParts(parts);
                 }
                 // 镜面光
-                else if (type.equals(LoaderMtlUtil.KS)) {
+                else if (type.equals(MtlLoaderUtil.KS)) {
                     currMtlData.Ks_Color = getColorFromParts(parts);
                 }
                 // 高光调整参数
-                else if (type.equals(LoaderMtlUtil.NS)) {
+                else if (type.equals(MtlLoaderUtil.NS)) {
                     currMtlData.ns = Float.parseFloat(parts.nextToken());
                 }
                 // 溶解度，为0时完全透明，1完全不透明
-                else if (type.equals(LoaderMtlUtil.D) || type.equals(LoaderMtlUtil.TR)) {
+                else if (type.equals(MtlLoaderUtil.D) || type.equals(MtlLoaderUtil.TR)) {
                     currMtlData.alpha = Float.parseFloat(parts.nextToken());
                 }
                 // map_Ka，map_Kd，map_Ks：材质的环境（ambient），散射（diffuse）和镜面（specular）贴图
-                else if (type.equals(LoaderMtlUtil.MAP_KA)) {
+                else if (type.equals(MtlLoaderUtil.MAP_KA)) {
                     currMtlData.Ka_Texture = parts.nextToken();
-                } else if (type.equals(LoaderMtlUtil.MAP_KD)) {
+                } else if (type.equals(MtlLoaderUtil.MAP_KD)) {
                     currMtlData.Kd_Texture = parts.nextToken();
-                } else if (type.equals(LoaderMtlUtil.MAP_KS)) {
+                } else if (type.equals(MtlLoaderUtil.MAP_KS)) {
                     currMtlData.Ks_ColorTexture = parts.nextToken();
-                } else if (type.equals(LoaderMtlUtil.MAP_NS)) {
+                } else if (type.equals(MtlLoaderUtil.MAP_NS)) {
                     currMtlData.Ns_Texture = parts.nextToken();
-                } else if (type.equals(LoaderMtlUtil.MAP_D) || type.equals(LoaderMtlUtil.MAP_TR)) {
+                } else if (type.equals(MtlLoaderUtil.MAP_D) || type.equals(MtlLoaderUtil.MAP_TR)) {
                     currMtlData.alphaTexture = parts.nextToken();
-                } else if (type.equals(LoaderMtlUtil.MAP_BUMP)) {
+                } else if (type.equals(MtlLoaderUtil.MAP_BUMP)) {
                     currMtlData.bumpTexture = parts.nextToken();
                 }
             }

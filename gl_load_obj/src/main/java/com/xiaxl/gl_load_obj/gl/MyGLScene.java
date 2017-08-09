@@ -125,7 +125,7 @@ public class MyGLScene extends LeGLBaseScene {
         // 加载obj文件
         ObjData objData = ObjParser.loadObj("obj/camaro.obj", this.getResources());
         // 构建3D物体对象
-        mLeGLObjSpirit = new LeGLObjSprite(this, objData.getvXYZ(), objData.getnXYZ(), objData.gettST());
+        mLeGLObjSpirit = new LeGLObjSprite(this, objData.getvXYZ(), objData.getnXYZ(), objData.gettST(),0xffffffff);
         //mLeGLObjSpirit.setSpriteScale(0.01f);
 
     }
