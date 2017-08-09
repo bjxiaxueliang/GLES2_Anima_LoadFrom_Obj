@@ -11,8 +11,8 @@ import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
 public class LeGLObjSprite extends LeGLBaseSpirit {
     private static final String TAG = LeGLObjSprite.class.getSimpleName();
 
-    public LeGLObjSprite(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor) {
-        super(scene, vertices, normals, texCoors, diffuseColor);
+    public LeGLObjSprite(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha) {
+        super(scene, vertices, normals, texCoors, diffuseColor,alpha);
     }
 
     @Override

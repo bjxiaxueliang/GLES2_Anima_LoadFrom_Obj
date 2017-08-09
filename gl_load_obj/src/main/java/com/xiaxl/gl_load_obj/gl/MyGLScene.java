@@ -129,7 +129,10 @@ public class MyGLScene extends LeGLBaseScene {
             if (mObjList != null) {
                 for (int i = 0; i < mObjList.size(); i++) {
                     ObjLoaderUtil.ObjData data = mObjList.get(i);
-                    mObjSprites.add(new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff));
+                    //
+                    int diffuseColor = data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff;
+                    float alpha = data.mtlData != null ? data.mtlData.alpha : 1.0f;
+                    mObjSprites.add(new LeGLObjSprite(this, data.aVertices, data.aNormals, data.aTexCoords, diffuseColor, alpha));
                 }
             }
         } catch (Exception e) {

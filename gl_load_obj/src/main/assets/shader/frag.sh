@@ -10,16 +10,20 @@ varying vec2 vTextureCoord;
 uniform vec3 uColor;
 // 绘制纹理or绘制颜色
 uniform int uRenderType;
+// alpha值
+uniform float uOpacity;
 
 void main()
 {
    //将计算出的颜色给此片元
    if (uRenderType == 0) {
       vec4 finalColor=texture2D(sTexture, vTextureCoord);
+      finalColor.a *= uOpacity;
       //给此片元颜色值
       gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
    }else{
       vec4 finalColor=vec4(uColor,1.0);
+      finalColor.a *= uOpacity;
       //给此片元颜色值
       gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
    }

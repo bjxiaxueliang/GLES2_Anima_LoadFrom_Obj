@@ -27,6 +27,7 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
     int maTexCoorHandle; //顶点纹理坐标属性引用
     int muColorHandle; // 顶点颜色
     int muRenderTypeHandle;// 绘制类型(0：绘制纹理 1：绘制颜色)
+    int muOpacityHandle; // 材质中透明度
     String mVertexShader;//顶点着色器代码脚本
     String mFragmentShader;//片元着色器代码脚本
 
@@ -35,22 +36,25 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
     FloatBuffer mTexCoorBuffer;//顶点纹理坐标数据缓冲
     // 材质漫反射光
     protected float[] mDifColor = new float[4];
+    // 材质中alpha
+    protected float alpha;
 
     // 是否有纹理
     private boolean mHasTexture = false;
     //
     int vCount = 0;
 
-    public LeGLBaseSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor) {
+    public LeGLBaseSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha) {
         super(scene);
         //初始化顶点坐标与着色数据
-        initVertexData(vertices, normals, texCoors, diffuseColor);
+        initVertexData(vertices, normals, texCoors, diffuseColor, alpha);
         //初始化shader
         initShader(scene.getResources());
     }
 
     //初始化顶点坐标与着色数据的方法
-    public void initVertexData(float[] vertices, float[] normals, float texCoors[], int diffuseColor) {
+    public void initVertexData(float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha) {
+        this.alpha = alpha;
         //顶点坐标数据的初始化================begin============================
         vCount = vertices.length / 3;
 
@@ -122,6 +126,8 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
         muColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor");
         // 绘制类型(0：绘制纹理 1：绘制颜色)
         muRenderTypeHandle = GLES20.glGetUniformLocation(mProgram, "uRenderType");
+        // alpha
+        muOpacityHandle = GLES20.glGetUniformLocation(mProgram, "uOpacity");
     }
 
     @Override
@@ -179,6 +185,9 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
             // 绘制颜色type
             GLES20.glUniform1i(muRenderTypeHandle, 1);
         }
+
+        GLES20.glUniform1f(muOpacityHandle, alpha);
+
         //启用顶点位置、法向量、纹理坐标数据
         GLES20.glEnableVertexAttribArray(maPositionHandle);
         GLES20.glEnableVertexAttribArray(maNormalHandle);
