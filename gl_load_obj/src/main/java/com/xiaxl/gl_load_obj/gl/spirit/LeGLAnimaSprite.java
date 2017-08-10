@@ -11,8 +11,8 @@ import java.util.ArrayList;
  *
  * @author xiaxl1
  */
-public class LeGLBaseAnimaSprite {
-    private static final String TAG = "LeGLBaseAnimaSprite";
+public class LeGLAnimaSprite {
+    private static final String TAG = "LeGLAnimaSprite";
 
     //####################上下文对象######################
     /**
@@ -25,7 +25,7 @@ public class LeGLBaseAnimaSprite {
      *
      * @param scene
      */
-    public LeGLBaseAnimaSprite(LeGLBaseScene scene) {
+    public LeGLAnimaSprite(LeGLBaseScene scene) {
         this.mBaseScene = scene;
 
     }

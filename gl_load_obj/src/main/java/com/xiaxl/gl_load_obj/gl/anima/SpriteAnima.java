@@ -1,9 +1,8 @@
 package com.xiaxl.gl_load_obj.gl.anima;
 
 import android.animation.TimeInterpolator;
-import android.util.Log;
 
-import com.xiaxl.gl_load_obj.gl.spirit.LeGLBaseAnimaSprite;
+import com.xiaxl.gl_load_obj.gl.spirit.LeGLAnimaSprite;
 
 import java.lang.reflect.Method;
 
@@ -72,7 +71,7 @@ public class SpriteAnima {
 
 
     //####################################反射set方法###################################
-    LeGLBaseAnimaSprite mSprite = null;
+    LeGLAnimaSprite mSprite = null;
     // 对应的setter方法
     private Method mSetterMethod = null;
 
@@ -82,7 +81,7 @@ public class SpriteAnima {
      * @param sprite
      * @param mathodName 方法名称(方法单个参数，方法参数为float类型的方法)
      */
-    public void setAnimaMethod(LeGLBaseAnimaSprite sprite, String mathodName) {
+    public void setAnimaMethod(LeGLAnimaSprite sprite, String mathodName) {
         this.mSprite = sprite;
         try {
             mSetterMethod = sprite.getClass().getMethod(mathodName, float.class);

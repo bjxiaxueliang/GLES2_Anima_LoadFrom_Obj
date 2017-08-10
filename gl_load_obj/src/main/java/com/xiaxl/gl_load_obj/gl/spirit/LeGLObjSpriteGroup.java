@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * @author xiaxveliang
  */
-public class LeGLObjSpriteGroup extends LeGLBaseAnimaSprite {
+public class LeGLObjSpriteGroup extends LeGLAnimaSprite {
     private static final String TAG = LeGLObjSpriteGroup.class.getSimpleName();
 
 
