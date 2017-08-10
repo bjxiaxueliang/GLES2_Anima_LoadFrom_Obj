@@ -38,7 +38,6 @@ public class MtlLoaderUtil {
         }
         //
         MtlData currMtlData = null;
-        String currName = "def";
         try {
             // 读取assets下文件
             InputStream in = res.getAssets().open(fname);
@@ -65,15 +64,15 @@ public class MtlLoaderUtil {
 
                 // 定义一个名为 'xxx'的材质
                 if (type.equals(MtlLoaderUtil.NEWMTL)) {
-                    currName = parts.hasMoreTokens() ? parts.nextToken() : "def";
-                    // 创建材质对象
+                    String name = parts.hasMoreTokens() ? parts.nextToken() : "def";
+                    // 将上一个对象加入到列表中
                     if (currMtlData != null) {
-                        mMTLMap.put(currName, currMtlData);
-                    } else {
-                        currMtlData = new MtlData();
+                        mMTLMap.put(currMtlData.name, currMtlData);
                     }
+                    // 创建材质对象
+                    currMtlData = new MtlData();
                     // 材质对象名称
-                    currMtlData.name = currName;
+                    currMtlData.name = name;
                 }
                 // 环境光
                 else if (type.equals(MtlLoaderUtil.KA)) {
@@ -112,7 +111,7 @@ public class MtlLoaderUtil {
                 }
             }
             if (currMtlData != null) {
-                mMTLMap.put(currName, currMtlData);
+                mMTLMap.put(currMtlData.name, currMtlData);
             }
             buffer.close();
         } catch (Exception e) {
