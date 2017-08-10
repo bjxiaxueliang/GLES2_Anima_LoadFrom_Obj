@@ -1,8 +1,6 @@
 package com.xiaxl.gl_load_obj.gl.spirit;
 
 
-import android.util.Log;
-
 import com.xiaxl.gl_load_obj.gl.anima.SpriteAnima;
 import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
 

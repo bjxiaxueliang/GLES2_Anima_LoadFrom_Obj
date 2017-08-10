@@ -19,7 +19,7 @@ import java.nio.FloatBuffer;
 /**
  * 加载后的物体
  */
-public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
+public class LeGLObjSpirit extends LeGLBaseAnimaSprite {
     int mProgram;//自定义渲染管线着色器程序id
     int muMVPMatrixHandle;//总变换矩阵引用
     int muMMatrixHandle;//位置、旋转变换矩阵
@@ -56,7 +56,7 @@ public class LeGLBaseSpirit extends LeGLBaseAnimaSprite {
     protected int textureId;
 
 
-    public LeGLBaseSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha, Bitmap bmp) {
+    public LeGLObjSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha, Bitmap bmp) {
         super(scene);
         //初始化顶点坐标与着色数据
         initVertexData(vertices, normals, texCoors, diffuseColor, alpha, bmp);
