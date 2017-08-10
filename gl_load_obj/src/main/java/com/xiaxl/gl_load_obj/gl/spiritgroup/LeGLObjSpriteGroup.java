@@ -34,9 +34,7 @@ public class LeGLObjSpriteGroup extends LeGLAnimaSprite {
         if (objDatas != null) {
             for (int i = 0; i < objDatas.size(); i++) {
 
-
-                Log.e("xiaxl: ", "-------i: " + i + "-------");
-
+                Log.e("xiaxl: ", "i: " + i);
 
                 ObjLoaderUtil.ObjData data = objDatas.get(i);
                 //
@@ -44,20 +42,20 @@ public class LeGLObjSpriteGroup extends LeGLAnimaSprite {
                 float alpha = data.mtlData != null ? data.mtlData.alpha : 1.0f;
                 String texturePath = data.mtlData != null ? data.mtlData.Kd_Texture : "";
 
-                Log.e("xiaxl: ", "texturePath: " + texturePath);
-
-
                 // 构造对象
                 if (data.aTexCoords != null && data.aTexCoords.length != 0 && TextUtils.isEmpty(texturePath) == false) {
+                    Log.e("xiaxl: ", "texture");
+
                     Bitmap bmp = BitmapUtil.getBitmapFromAsset(getBaseScene().getContext(), texturePath);
                     LeGLBaseSpirit spirit = new LeGLObjTextureSpirit(getBaseScene(), data.aVertices, data.aNormals, data.aTexCoords, alpha, bmp);
                     mObjSprites.add(spirit);
                 } else {
+
+                    Log.e("xiaxl: ", "color");
+
                     LeGLBaseSpirit spirit = new LeGLObjColorSpirit(getBaseScene(), data.aVertices, data.aNormals, diffuseColor, alpha);
                     mObjSprites.add(spirit);
                 }
-
-
             }
         }
     }

@@ -92,7 +92,8 @@ public class MtlLoaderUtil {
                     currMtlData.ns = Float.parseFloat(ns);
                 }
                 // 溶解度，为0时完全透明，1完全不透明
-                else if (type.equals(MtlLoaderUtil.D) || type.equals(MtlLoaderUtil.TR)) {
+                //else if (type.equals(MtlLoaderUtil.D) || type.equals(MtlLoaderUtil.TR)) {
+                else if (type.equals(MtlLoaderUtil.D)) {
                     currMtlData.alpha = Float.parseFloat(parts.nextToken());
                 }
                 // map_Ka，map_Kd，map_Ks：材质的环境（ambient），散射（diffuse）和镜面（specular）贴图
