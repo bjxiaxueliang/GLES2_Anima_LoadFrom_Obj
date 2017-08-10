@@ -9,7 +9,7 @@ import android.view.animation.OvershootInterpolator;
 
 import com.xiaxl.gl_load_obj.gl.anima.SpriteAnima;
 import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
-import com.xiaxl.gl_load_obj.gl.spirit.LeGLObjSpriteGroup;
+import com.xiaxl.gl_load_obj.gl.spiritgroup.LeGLObjSpriteGroup;
 import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
 import com.xiaxl.gl_load_obj.objloader.ObjLoaderUtil;
 
@@ -121,7 +121,7 @@ public class MyGLScene extends LeGLBaseScene {
          * ----勋章---
          */
         try {
-            mObjList = ObjLoaderUtil.load("camaro.obj", this.getResources());
+            mObjList = ObjLoaderUtil.load("multiobjects.obj", this.getResources());
         } catch (Exception e) {
             e.printStackTrace();
         }

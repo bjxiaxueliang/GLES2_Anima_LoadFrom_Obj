@@ -2,7 +2,7 @@ package com.xiaxl.gl_load_obj.gl.anima;
 
 import android.animation.TimeInterpolator;
 
-import com.xiaxl.gl_load_obj.gl.spirit.LeGLAnimaSprite;
+import com.xiaxl.gl_load_obj.gl.spiritgroup.LeGLAnimaSprite;
 
 import java.lang.reflect.Method;
 

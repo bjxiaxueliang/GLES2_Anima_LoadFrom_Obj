@@ -19,7 +19,7 @@ import java.nio.FloatBuffer;
 /**
  * 加载后的物体
  */
-public class LeGLObjSpirit {
+public class LeGLObjColorSpirit extends LeGLBaseSpirit {
     int mProgram;//自定义渲染管线着色器程序id
     int muMVPMatrixHandle;//总变换矩阵引用
     int muMMatrixHandle;//位置、旋转变换矩阵
@@ -27,46 +27,33 @@ public class LeGLObjSpirit {
     int maNormalHandle; //顶点法向量属性引用
     int maLightLocationHandle;//光源位置属性引用
     int maCameraHandle; //摄像机位置属性引用
-    int maTexCoorHandle; //顶点纹理坐标属性引用
     int muColorHandle; // 顶点颜色
-    int muRenderTypeHandle;// 绘制类型(0：绘制纹理 1：绘制颜色)
     int muOpacityHandle; // 材质中透明度
     String mVertexShader;//顶点着色器代码脚本
     String mFragmentShader;//片元着色器代码脚本
 
     FloatBuffer mVertexBuffer;//顶点坐标数据缓冲
     FloatBuffer mNormalBuffer;//顶点法向量数据缓冲
-    FloatBuffer mTexCoorBuffer;//顶点纹理坐标数据缓冲
     // 材质漫反射光
     protected float[] mDifColor = new float[4];
     // 材质中alpha
     protected float mAlpha;
-    // 需转化为纹理的图片
-    protected Bitmap mBmp;
     //
     int vCount = 0;
+
     /**
      *
      */
-    // 是否有纹理
-    protected boolean mHasTexture = false;
-    // 纹理是否已加载
-    protected boolean isInintFinsh = false;
-    // 纹理id
-    protected int textureId;
-
-
-    public LeGLObjSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha, Bitmap bmp) {
+    public LeGLObjColorSpirit(LeGLBaseScene scene, float[] vertices, float[] normals, int diffuseColor, float alpha) {
         //初始化顶点坐标与着色数据
-        initVertexData(vertices, normals, texCoors, diffuseColor, alpha, bmp);
+        initVertexData(vertices, normals, diffuseColor, alpha);
         //初始化shader
         initShader(scene.getResources());
     }
 
     //初始化顶点坐标与着色数据的方法
-    public void initVertexData(float[] vertices, float[] normals, float texCoors[], int diffuseColor, float alpha, Bitmap bmp) {
+    public void initVertexData(float[] vertices, float[] normals, int diffuseColor, float alpha) {
         this.mAlpha = alpha;
-        this.mBmp = bmp;
         //顶点坐标数据的初始化================begin============================
         vCount = vertices.length / 3;
 
@@ -91,20 +78,6 @@ public class LeGLObjSpirit {
         //转换，关键是要通过ByteOrder设置nativeOrder()，否则有可能会出问题
         //顶点着色数据的初始化================end============================
 
-        //顶点纹理坐标数据的初始化================begin============================
-        if (texCoors != null && texCoors.length != 0) {
-            ByteBuffer tbb = ByteBuffer.allocateDirect(texCoors.length * 4);
-            tbb.order(ByteOrder.nativeOrder());//设置字节顺序
-            mTexCoorBuffer = tbb.asFloatBuffer();//转换为Float型缓冲
-            mTexCoorBuffer.put(texCoors);//向缓冲区中放入顶点纹理坐标数据
-            mTexCoorBuffer.position(0);//设置缓冲区起始位置
-            //特别提示：由于不同平台字节顺序不同数据单元不是字节的一定要经过ByteBuffer
-            //转换，关键是要通过ByteOrder设置nativeOrder()，否则有可能会出问题
-            //顶点纹理坐标数据的初始化================end============================
-            mHasTexture = true;
-        }
-        // 没有纹理，则需要用漫反射颜色代替obj的颜色
-
         //材质漫反射光================begin============================
         mDifColor[0] = (float) Color.red(diffuseColor) / 255.f;
         mDifColor[1] = (float) Color.green(diffuseColor) / 255.f;
@@ -115,9 +88,9 @@ public class LeGLObjSpirit {
     //初始化shader
     public void initShader(Resources res) {
         //加载顶点着色器的脚本内容
-        mVertexShader = ShaderUtil.loadFromAssetsFile("shader/vertex.sh", res);
+        mVertexShader = ShaderUtil.loadFromAssetsFile("shader/color_vertex.sh", res);
         //加载片元着色器的脚本内容
-        mFragmentShader = ShaderUtil.loadFromAssetsFile("shader/frag.sh", res);
+        mFragmentShader = ShaderUtil.loadFromAssetsFile("shader/color_frag.sh", res);
         //基于顶点着色器与片元着色器创建程序
         mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
         //获取程序中顶点位置属性引用
@@ -130,36 +103,16 @@ public class LeGLObjSpirit {
         muMMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMMatrix");
         //获取程序中光源位置引用
         maLightLocationHandle = GLES20.glGetUniformLocation(mProgram, "uLightLocation");
-        //获取程序中顶点纹理坐标属性引用
-        maTexCoorHandle = GLES20.glGetAttribLocation(mProgram, "aTexCoor");
         //获取程序中摄像机位置引用
         maCameraHandle = GLES20.glGetUniformLocation(mProgram, "uCamera");
         // 顶点颜色
         muColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor");
-        // 绘制类型(0：绘制纹理 1：绘制颜色)
-        muRenderTypeHandle = GLES20.glGetUniformLocation(mProgram, "uRenderType");
         // alpha
         muOpacityHandle = GLES20.glGetUniformLocation(mProgram, "uOpacity");
     }
 
-    /**
-     * 初始化纹理
-     */
-    private void initTexture() {
-        // 两球之间连线的纹理图片
-        if (mBmp != null) {
-            textureId = TextureUtil.getTextureIdByBitmap(mBmp);
-        }
-    }
-
-
+    @Override
     public void drawSelf(long drawTime) {
-        // 加载纹理
-        if (isInintFinsh == false) {
-            initTexture();
-            isInintFinsh = true;
-        }
-
         //制定使用某套着色器程序
         GLES20.glUseProgram(mProgram);
         //将最终变换矩阵传入着色器程序
@@ -190,39 +143,16 @@ public class LeGLObjSpirit {
                         3 * 4,
                         mNormalBuffer
                 );
-        // 颜色相关
-        if (mHasTexture) {
-            //为画笔指定顶点纹理坐标数据
-            GLES20.glVertexAttribPointer
-                    (
-                            maTexCoorHandle,
-                            2,
-                            GLES20.GL_FLOAT,
-                            false,
-                            2 * 4,
-                            mTexCoorBuffer
-                    );
-            // 绘制纹理type
-            GLES20.glUniform1i(muRenderTypeHandle, 0);
-            // 启用顶点纹理数组
-            GLES20.glEnableVertexAttribArray(maTexCoorHandle);
-        } else {
-            // 材质颜色
-            GLES20.glUniform3fv(muColorHandle, 1, mDifColor, 0);
-            // 绘制颜色type
-            GLES20.glUniform1i(muRenderTypeHandle, 1);
-        }
 
+        // 材质颜色
+        GLES20.glUniform3fv(muColorHandle, 1, mDifColor, 0);
+        // 材质alpha
         GLES20.glUniform1f(muOpacityHandle, mAlpha);
 
         //启用顶点位置、法向量、纹理坐标数据
         GLES20.glEnableVertexAttribArray(maPositionHandle);
         GLES20.glEnableVertexAttribArray(maNormalHandle);
 
-        if (mHasTexture) {
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-        }
         //绘制加载的物体
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vCount);
     }

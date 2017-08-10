@@ -1,4 +1,4 @@
-package com.xiaxl.gl_load_obj.gl.spirit;
+package com.xiaxl.gl_load_obj.gl.spiritgroup;
 
 
 import com.xiaxl.gl_load_obj.gl.anima.SpriteAnima;
