@@ -82,7 +82,7 @@ public class MyGLScene extends LeGLBaseScene {
          * 绘制地球
          */
         MatrixState.pushMatrix();
-        MatrixState.translate(0, 0, -20);
+        MatrixState.translate(0, 0, -10);
         //
         mSpriteGroup.drawSelf(drawTime);
 
@@ -121,7 +121,7 @@ public class MyGLScene extends LeGLBaseScene {
          * ----勋章---
          */
         try {
-            mObjList = ObjLoaderUtil.load("multiobjects.obj", this.getResources());
+            mObjList = ObjLoaderUtil.load("camaro.obj", this.getResources());
         } catch (Exception e) {
             e.printStackTrace();
         }
