@@ -11,7 +11,7 @@ uniform float uOpacity;
 
 void main()
 {
-    vec4 finalColor=vec4(1.0,1.0,1.0,1.0);
+    vec4 finalColor=vec4(uColor,1.0);
     finalColor.a *= uOpacity;
     //给此片元颜色值
     gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
