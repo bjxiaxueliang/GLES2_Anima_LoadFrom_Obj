@@ -1,10 +1,9 @@
 ## opengl es 2.0中加载.obj 与 .mtl
 
-
 项目中有个load obj需求，在网上看了很多的例子，也找了几个开源框架，发现其在**解析obj与mtl文件**上均不完善（其中包括2012年我们几个写的《Android 3D游戏开发技术宝典——OpenGL ES 2.0》）。
 比如：
 + **mind3d** 2011年就已停止维护(为opengl es1.0)，并且在加载多图形上存在很大的不兼容。
-+ **《Android 3D游戏开发技术宝典——OpenGL ES 2.0》**第九章 3D模型加载。
++ **《Android 3D游戏开发技术宝典——OpenGL ES 2.0》** 第九章 3D模型加载。
 2012年我们几个在写这本书时，只是简单解析了obj文件，而且对mtl文件并未做解析(看到网上很多的例子是把这一章的案例直接照搬了)
 
 **mind3d官方地址与源码**：
@@ -15,7 +14,7 @@ https://github.com/deadmoose/min3d
 我觉得，项目开发中时间紧张，不应该把时间话费在obj与mtl文件解析上。
 所以，打算搞一个兼容性较强obj 3d文件加载库，便于以后项目中再次遇到时，可节省大量项目时间。
 
-##效果图
+## 效果图
 ![Map_Demo](./image/001.png)
 ![Map_Demo](./image/002.png)
 
@@ -24,7 +23,7 @@ https://github.com/deadmoose/min3d
 **对于obj与mtl文件格式不太了解的同学，可参考：**
 http://blog.csdn.net/xiaxl/article/details/76893165
 
-##mtl文件解析代码
+## mtl文件解析代码
 
 ```java
 /**
@@ -208,7 +207,7 @@ public class MtlLoaderUtil {
 }
 ```
 
-##obj文件解析代码
+## obj文件解析代码
 
 
 ```java
