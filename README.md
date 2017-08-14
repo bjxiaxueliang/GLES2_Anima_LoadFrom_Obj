@@ -1,29 +1,147 @@
 ## opengl es 2.0中加载.obj 与 .mtl
 
-项目中有个load obj需求，在网上看了很多的例子，也找了几个开源框架，发现其在**解析obj与mtl文件**上均不完善（其中包括2012年我们几个写的《Android 3D游戏开发技术宝典——OpenGL ES 2.0》）。
-比如：
-+ **mind3d** 2011年就已停止维护(为opengl es1.0)，并且在加载多图形上存在很大的不兼容。
-+ **《Android 3D游戏开发技术宝典——OpenGL ES 2.0》** 第九章 3D模型加载。
-2012年我们几个在写这本书时，只是简单解析了obj文件，而且对mtl文件并未做解析(看到网上很多的例子是把这一章的案例直接照搬了)
+@(预发布)[Android代码]
+
+本来以为网上应该有兼容性较好的obj与mtl的java解析库，但在网上找了好多代码，发现其在加载obj与mtl中，基本都存在较大问题。
+
+网上代码主要分为了以下几个部分：
+
++ mind3d 2011年就已停止维护(为opengl es1.0)，并且在加载多图形上存在很大的不兼容(**主要解析了obj，mtl没有解析**)。
++ 其他一些obj解析代码，基本都是**解析了obj，不管mtl文件**；
+或者简单**解析了mtl，却没有把对应的材质信息应用到opengl 绘制的图形上**。
++ 《Android 3D游戏开发技术宝典——OpenGL ES 2.0》 第九章 3D模型加载。 2012年我们几个在写这本书时，只是简单解析了obj文件，而且对mtl文件并未做解析(看到网上很多的例子是把这一章的案例直接照搬了)
 
 **mind3d官方地址与源码**：
 https://code.google.com/archive/p/min3d/
 https://github.com/deadmoose/min3d
-**《Android 3D游戏开发技术宝典——OpenGL ES 2.0》请自行京东**
 
-我觉得，项目开发中时间紧张，不应该把时间话费在obj与mtl文件解析上。
-所以，打算搞一个兼容性较强obj 3d文件加载库，便于以后项目中再次遇到时，可节省大量项目时间。
 
-## 效果图
-![Map_Demo](./image/001.png)
-![Map_Demo](./image/002.png)
+##  Obj简介
 
-## .obj 和 .mtl文件格式
+obj文件是3D模型文件格式。由Alias|Wavefront公司为3D建模和动画软件”Advanced Visualizer”开发的一种标准，适合用于3D软件模型之间的互导，也可以通过Maya读写。
 
-**对于obj与mtl文件格式不太了解的同学，可参考：**
++ 只支持模型三角面数据和材质信息，无动画功能支持；
++ 其中几何信息由.obj文件提供，材质信息由.mtl文件定义；
++ 文件以行为单位表示一条数据，可以根据行开头的字符判断后续的内容；
++ 其中 # 字符表示注释行
+
+关于obj详细介绍，可查看：
 http://blog.csdn.net/xiaxl/article/details/76893165
 
-## mtl文件解析代码
+## .obj 与 .mtl举例
+
+
+以obj中加载三角形为例：
+
+![这里写图片描述](http://img.blog.csdn.net/20170814103730107?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+![这里写图片描述](http://img.blog.csdn.net/20170814103746858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+
+### 三角形ojb文件
+
+obj文件中主要存放的以下几何信息
+
++ 三维空间中顶点坐标信息
++ 顶点的纹理坐标(贴图坐标)信息
++ 顶点的法向量信息(计算光照用)
+
+```
+# mtl材质文件
+# mtllib testvt.mtl
+
+# o 对象名称(Object name)
+o adfaf
+
+# 组名称
+g default
+
+# 顶点
+v 0 0.5 0
+v -0.5 -0.5 0
+v 0.5 -0.5 0
+
+# 纹理坐标
+vt 0.0 1.0
+vt 0.0 0.0
+vt 1.0 1.0
+
+# 顶点法线
+vn 0 0 1
+
+# 当前图元所用材质
+usemtl Default
+
+# s Smooth shading across polygons is enabled by smoothing groups.
+# Smooth shading can be disabled as well.
+s off
+
+# v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3(索引起始于1)
+f 1/1/1 2/2/1 3/3/1
+```
+
+
+### 三角形mtl文件
+
+mtl中主要规定了几何图形的贴图信息，对环境光、散射光、镜面光的反射情况、透明度等
+
+```
+# 定义一个名为 'Default'的材质
+newmtl Default
+
+# 材质的环境光
+Ka 0 0 0
+# 散射光
+Kd 0.784314 0.784314 0.784314
+# 镜面光
+Ks 0 0 0
+
+# 透明度
+d 1
+
+# 为漫反射指定颜色纹理文件
+map_Kd test_vt.png
+```
+
+### 三维空间对光的模拟：
+当光照射到一个物体表面上时，会出现三种情形。 
+
++ 首先，光可以通过物体表面向空间反射， 产生反射光。 
++ 其次，对于透明体，光可以穿透该物体并从另一端射出，产生透射光。 
++ 最后，部分光将被物体表面吸收而转换成热。 
+
+在上述三部分光中，仅仅是透射光和反射光能够进入人眼产生视觉效果。这里**只考虑被照明物体表面的反射光影响**，假定物体表面光滑不透明且由理想材料构成，环境假设为由白光照明。 
+一般来说，**反射光可以分成三个分量，即环境反射、漫反射和镜面反射**。
+
+
+关于关照与材质相关，可参考：
+http://blog.csdn.net/xiaxl/article/details/76826812
+
+
+
+
+## 案例效果图和手机运行效果
+
+![这里写图片描述](http://img.blog.csdn.net/20170810133546370?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![这里写图片描述](http://img.blog.csdn.net/20170810133637230?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+
+## 文档和案例地址
+
+http://blog.csdn.net/xiaxl/article/details/77048507
+
+https://github.com/xiaxveliang/GLES2_Anima_LoadFrom_Obj
+
+
+## opengl es 2.0中加载.obj 与 .mtl
+
+
+这里要做的就是以下两件事：
+
++ 解析**.obj文件提供几何信息，.mtl文件定义材质信息**；
++ 再由opengl es将以上数据绘制出来。
+
+### mtl解析代码
 
 ```java
 /**
@@ -207,7 +325,7 @@ public class MtlLoaderUtil {
 }
 ```
 
-## obj文件解析代码
+### obj解析代码
 
 
 ```java
@@ -559,11 +677,7 @@ public class ObjLoaderUtil {
     }
 }
 ```
-
-## 项目地址：
-https://github.com/xiaxveliang/GL_Anima_LoadFrom_Obj
-
-
+![这里写图片描述](http://img.blog.csdn.net/20170814103635466?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 ## 参考：
 本文参考了[Rajawali](https://github.com/xiaxveliang/Rajawali)
 
