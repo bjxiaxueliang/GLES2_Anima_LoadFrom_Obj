@@ -1,7 +1,5 @@
 ## opengl es 2.0中加载.obj 与 .mtl
 
-@(预发布)[Android代码]
-
 本来以为网上应该有兼容性较好的obj与mtl的java解析库，但在网上找了好多代码，发现其在加载obj与mtl中，基本都存在较大问题。
 
 网上代码主要分为了以下几个部分：
@@ -33,9 +31,9 @@ http://blog.csdn.net/xiaxl/article/details/76893165
 
 以obj中加载三角形为例：
 
-![这里写图片描述](http://img.blog.csdn.net/20170814103730107?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![enter image description here](https://github.com/xiaxveliang/GLES2_Anima_LoadFrom_Obj/blob/master/image/00001.png)
 
-![这里写图片描述](http://img.blog.csdn.net/20170814103746858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![enter image description here](https://github.com/xiaxveliang/GLES2_Anima_LoadFrom_Obj/blob/master/image/00002.png)
 
 
 ### 三角形ojb文件
@@ -122,8 +120,10 @@ http://blog.csdn.net/xiaxl/article/details/76826812
 
 ## 案例效果图和手机运行效果
 
-![这里写图片描述](http://img.blog.csdn.net/20170810133546370?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-![这里写图片描述](http://img.blog.csdn.net/20170810133637230?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![enter image description here](https://github.com/xiaxveliang/GLES2_Anima_LoadFrom_Obj/blob/master/image/00003.png)
+
+![enter image description here](https://github.com/xiaxveliang/GLES2_Anima_LoadFrom_Obj/blob/master/image/00004.png)
+
 
 
 ## 文档和案例地址
@@ -677,7 +677,8 @@ public class ObjLoaderUtil {
     }
 }
 ```
-![这里写图片描述](http://img.blog.csdn.net/20170814103635466?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGlheGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![enter image description here](https://github.com/xiaxveliang/GLES2_Anima_LoadFrom_Obj/blob/master/image/00005.png)
+
 ## 参考：
 本文参考了[Rajawali](https://github.com/xiaxveliang/Rajawali)
 
