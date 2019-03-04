@@ -1,3 +1,6 @@
+## 如果此工程代码对您有帮助，请扫描以下二维码支持我！
+![在这里插入图片描述](https://raw.githubusercontent.com/xiaxveliang/GLES2_Anima_LoadFrom_Obj/master/image/pay_2rmb.png)
+
 ## opengl es 2.0中加载.obj 与 .mtl
 
 本来以为网上应该有兼容性较好的obj与mtl的java解析库，但在网上找了好多代码，发现其在加载obj与mtl中，基本都存在较大问题。
