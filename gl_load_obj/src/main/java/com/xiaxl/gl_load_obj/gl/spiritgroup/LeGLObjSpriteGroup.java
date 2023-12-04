@@ -13,6 +13,8 @@ import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
 import com.xiaxl.gl_load_obj.objloader.ObjLoaderUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * @author xiaxveliang
@@ -22,10 +24,11 @@ public class LeGLObjSpriteGroup extends LeGLAnimaSprite {
 
 
     private ArrayList<LeGLBaseSpirit> mObjSprites = new ArrayList<LeGLBaseSpirit>();
+    private HashMap<String, Bitmap> mSlotTextureMap;
 
-    public LeGLObjSpriteGroup(LeGLBaseScene scene, ArrayList<ObjLoaderUtil.ObjData> objDatas) {
+    public LeGLObjSpriteGroup(LeGLBaseScene scene, ArrayList<ObjLoaderUtil.ObjData> objDatas, HashMap<String, Bitmap> mSlotTextureMap) {
         super(scene);
-        //
+        this.mSlotTextureMap = mSlotTextureMap;
         initObjs(objDatas);
     }
 
@@ -41,12 +44,18 @@ public class LeGLObjSpriteGroup extends LeGLAnimaSprite {
                 int diffuseColor = data.mtlData != null ? data.mtlData.Kd_Color : 0xffffffff;
                 float alpha = data.mtlData != null ? data.mtlData.alpha : 1.0f;
                 String texturePath = data.mtlData != null ? data.mtlData.Kd_Texture : "";
+                if (data.mtlData.name != null){
+                    Log.d("TEST", data.mtlData.name);
+                }
 
                 // 构造对象
-                if (data.aTexCoords != null && data.aTexCoords.length != 0 && TextUtils.isEmpty(texturePath) == false) {
+                if (data.aTexCoords != null && data.aTexCoords.length != 0 && (!TextUtils.isEmpty(texturePath) || mSlotTextureMap.get(data.mtlData.name) != null)) {
                     Log.e("xiaxl: ", "texture");
 
-                    Bitmap bmp = BitmapUtil.getBitmapFromAsset(getBaseScene().getContext(), texturePath);
+                    Bitmap bmp = mSlotTextureMap.get(data.mtlData.name);
+                    if (bmp == null){
+                        bmp = BitmapUtil.getBitmapFromAsset(getBaseScene().getContext(), texturePath);
+                    }
                     LeGLBaseSpirit spirit = new LeGLObjTextureSpirit(getBaseScene(), data.aVertices, data.aNormals, data.aTexCoords, alpha, bmp);
                     mObjSprites.add(spirit);
                 } else {

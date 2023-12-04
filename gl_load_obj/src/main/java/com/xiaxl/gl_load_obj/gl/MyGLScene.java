@@ -1,12 +1,15 @@
 package com.xiaxl.gl_load_obj.gl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.OvershootInterpolator;
 
+import com.xiaxl.gl_load_obj.R;
 import com.xiaxl.gl_load_obj.gl.anima.SpriteAnima;
 import com.xiaxl.gl_load_obj.gl.scene.LeGLBaseScene;
 import com.xiaxl.gl_load_obj.gl.spiritgroup.LeGLObjSpriteGroup;
@@ -14,6 +17,7 @@ import com.xiaxl.gl_load_obj.gl.utils.MatrixState;
 import com.xiaxl.gl_load_obj.objloader.ObjLoaderUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
  * GL SurfaceView
@@ -101,6 +105,8 @@ public class MyGLScene extends LeGLBaseScene {
     private float mSceneHeight = 1280;
     // obj数据
     ArrayList<ObjLoaderUtil.ObjData> mObjList ;
+    // 动态材质贴图
+    HashMap<String, Bitmap> mSlotTextureMap = new HashMap<String, Bitmap>();
 
 
     /**
@@ -121,12 +127,16 @@ public class MyGLScene extends LeGLBaseScene {
          * ----勋章---
          */
         try {
-            mObjList = ObjLoaderUtil.load("camaro.obj", this.getResources());
+            mSlotTextureMap.put(
+                    "图片区域",
+                    ((BitmapDrawable) getContext().getDrawable(R.drawable.holder)).getBitmap()
+            );
+            mObjList = ObjLoaderUtil.load("badge.obj", this.getResources());
         } catch (Exception e) {
             e.printStackTrace();
         }
         //
-        mSpriteGroup = new LeGLObjSpriteGroup(this, mObjList);
+        mSpriteGroup = new LeGLObjSpriteGroup(this, mObjList, mSlotTextureMap);
 
     }
 
