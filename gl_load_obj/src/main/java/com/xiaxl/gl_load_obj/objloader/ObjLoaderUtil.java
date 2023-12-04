@@ -147,11 +147,11 @@ public class ObjLoaderUtil {
                 else if (type.equals(F)) {
                     // 当前obj对象有面数据
                     currObjHasFaces = true;
-                    // 是否为矩形(android 均为三角形，这里暂时先忽略多边形的情况)
-                    boolean isQuad = numTokens == 5;
-                    int[] quadvids = new int[4];
-                    int[] quadtids = new int[4];
-                    int[] quadnids = new int[4];
+                    // 是否为多边形
+                    boolean isMulti = numTokens >= 5;
+                    int[] quadvids = new int[numTokens - 1];
+                    int[] quadtids = new int[numTokens - 1];
+                    int[] quadnids = new int[numTokens - 1];
 
                     // 如果含有"//" 替换
                     boolean emptyVt = line.indexOf("//") > -1;
@@ -183,7 +183,7 @@ public class ObjLoaderUtil {
                         } else {
                             idx -= 1;
                         }
-                        if (!isQuad) {
+                        if (!isMulti) {
                             currObjData.vertexIndices.add(idx);
                         } else {
                             quadvids[i - 1] = idx;
@@ -196,7 +196,7 @@ public class ObjLoaderUtil {
                             } else {
                                 idx -= 1;
                             }
-                            if (!isQuad) {
+                            if (!isMulti) {
                                 currObjData.texCoordIndices.add(idx);
                             } else {
                                 quadtids[i - 1] = idx;
@@ -210,7 +210,7 @@ public class ObjLoaderUtil {
                             } else {
                                 idx -= 1;
                             }
-                            if (!isQuad) {
+                            if (!isMulti) {
                                 currObjData.normalIndices.add(idx);
                             } else {
                                 quadnids[i - 1] = idx;
@@ -218,10 +218,15 @@ public class ObjLoaderUtil {
                         }
                     }
                     // 如果是多边形
-                    if (isQuad) {
-                        int[] indices = new int[]{0, 1, 2, 0, 2, 3};
-                        for (int i = 0; i < 6; ++i) {
-                            int index = indices[i];
+                    if (isMulti) {
+                        int border = numTokens - 1;
+                        int[] indices = new int[(border - 2) * 3];
+                        for (int i = 0; i < (border - 2); i++) {
+                            indices[i * 3] = 0;
+                            indices[i * 3 + 1] = i + 1;
+                            indices[i * 3 + 2] = i + 2;
+                        }
+                        for (int index : indices) {
                             currObjData.vertexIndices.add(quadvids[index]);
                             currObjData.texCoordIndices.add(quadtids[index]);
                             currObjData.normalIndices.add(quadnids[index]);
